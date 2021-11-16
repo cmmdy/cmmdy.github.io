@@ -1,267 +1,158 @@
-
-
-<!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
-
-<head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.jpeg">
-  <link rel="icon" href="/img/favicon.jpeg">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="description" content="从系统底层原理分析Android卡顿原因、Android虚拟机进化过程">
-  <meta name="author" content="cmmdy">
-  <meta name="keywords" content="">
-  <meta name="description" content="从系统底层原理分析Android卡顿原因、Android虚拟机进化过程">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>安卓系统卡顿分析 | 羊毛小屋</title><meta name="keywords" content="Android"><meta name="author" content="羊毛"><meta name="copyright" content="羊毛"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="从系统底层原理分析Android卡顿原因、Android虚拟机进化过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="安卓系统卡顿分析">
 <meta property="og:url" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/index.html">
-<meta property="og:site_name" content="吃猫猫的鱼">
+<meta property="og:site_name" content="羊毛小屋">
 <meta property="og:description" content="从系统底层原理分析Android卡顿原因、Android虚拟机进化过程">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/3.png">
-<meta property="og:image" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/6.png">
-<meta property="og:image" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/4.png">
-<meta property="og:image" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/5.png">
-<meta property="og:image" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/1.png">
-<meta property="og:image" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/2.png">
+<meta property="og:image" content="http://example.com/img/bg/908284.png">
 <meta property="article:published_time" content="2021-11-11T07:34:02.000Z">
-<meta property="article:modified_time" content="2021-11-11T09:02:03.906Z">
-<meta property="article:author" content="cmmdy">
+<meta property="article:modified_time" content="2021-11-16T06:11:21.010Z">
+<meta property="article:author" content="羊毛">
 <meta property="article:tag" content="Android">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/3.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/bg/908284.png"><link rel="shortcut icon" href="/img/favicon.jpeg"><link rel="canonical" href="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":50,"languages":{"author":"作者: 羊毛","link":"链接: ","source":"来源: 羊毛小屋","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#121212","position":"bottom-right"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: true,
+  islazyload: false,
+  isanchor: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '安卓系统卡顿分析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-11-16 14:11:21'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
   
-  <title>安卓系统卡顿分析 - 吃猫猫的鱼</title>
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
-
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
-  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
-
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
   
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
     
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
     
-      
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    const fontSizeVal = saveToLocal.get('global-font-size')
+    if (fontSizeVal !== undefined) {
+      document.documentElement.style.setProperty('--global-font-size', fontSizeVal + 'px')
+    }
     
-  
-
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
-  
-
-
-<!-- 主题依赖的图标库，不要自行修改 -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-<!-- 自定义样式保持在最底部 -->
-
-
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.12","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname"}},"search_path":"/local-search.xml"};
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-
-<body>
-  <header style="height: 70vh;">
-    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>吃猫猫的鱼</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                首页
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                归档
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                分类
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                标签
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                关于
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
-            </a>
-          </li>
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
-                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-    <div class="banner" id="banner" parallax=true
-         style="background: url('/img/bg/banner.jpg') no-repeat center center;
-           background-size: cover;">
-      <div class="full-bg-img">
-        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-          <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="安卓系统卡顿分析">
-              
-            </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-11-11 15:34" pubdate>
-        2021年11月11日 下午
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      6.5k 字
-    </span>
-  
-
-  
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      20 分钟
-    </span>
-  
-
-  
-  
-    
-      <!-- 不蒜子统计文章PV -->
-      <span id="busuanzi_container_page_pv" style="display: none">
-        <i class="iconfont icon-eye" aria-hidden="true"></i>
-        <span id="busuanzi_value_page_pv"></span> 次
-      </span>
-    
-  
-</div>
-
-            
-          </div>
-
-          
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    
-      
-
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">安卓系统卡顿分析</h1>
-            
-              <p class="note note-info">
-                
-                  本文最后更新于：2021年11月11日 下午
-                
-              </p>
-            
-            <div class="markdown-body">
-              <p>从系统底层原理分析Android卡顿原因、Android虚拟机进化过程</p>
-<span id="more"></span>
-
-<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>最近<strong>华为方舟编译器</strong>要开源了，笔者去看了下发布会PPT，发现作为一名Android开发者，PPT中所介绍的知识点我居然不能完全看懂？？？于是乎恶补了下PPT中的内容，整理成本文。</p>
+    const detectApple = () => {
+      if (GLOBAL_CONFIG_SITE.isHome && /iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/self/gruvbox-dark.css"><meta name="generator" content="Hexo 5.4.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/favicon.jpeg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/bg/908284.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">羊毛小屋</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">安卓系统卡顿分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-11-11T07:34:02.000Z" title="发表于 2021-11-11 15:34:02">2021-11-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-11-16T06:11:21.010Z" title="更新于 2021-11-16 14:11:21">2021-11-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android/">Android</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="安卓系统卡顿分析"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><p>最近<strong>华为方舟编译器</strong>要开源了，笔者去看了下发布会PPT，发现作为一名Android开发者，PPT中所介绍的知识点我居然不能完全看懂？？？于是乎恶补了下PPT中的内容，整理成本文。</p>
 <p>本文将用通俗的语言从底层介绍Android卡顿的历史原因和谷歌与之斗争的过程</p>
 <p>阅读完这篇文章后你将</p>
 <ol>
@@ -279,10 +170,10 @@
 <p>某些编程语言（如Java）的源代码通过编译-解释的流程可被计算机读懂</p>
 </blockquote>
 <p>先上一段Java代码</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-built_in">void</span> <span class="hljs-function"><span class="hljs-title">main</span>(<span class="hljs-params"><span class="hljs-built_in">String</span>[] args</span>)</span>&#123;<br>    print(<span class="hljs-string">&#x27;Hello World&#x27;</span>)<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    print(<span class="string">&#x27;Hello World&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这是所有程序员的第一课，只需要写完这段代码并执行，电脑或手机就会打印出<code>Hello World</code>。<br>那么问题来了，英文是人类世界的语言，计算机（CPU）是怎么理解英文的呢？</p>
 <p>众所周知，0和1是计算机世界的语言，可以说计算机只认识0和1。<br>那么我们只需要把上面那段英文代码只通过0和1表达给计算机，就可以让计算机读懂并执行。</p>
-<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/3.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/3.png"></p>
 <p>结合上图，Java源代码通过<code>编译</code>变成字节码，然后字节码按照模版中的规则<code>解释</code>为机器码。</p>
 <h3 id="2-机器码-amp-字节码"><a href="#2-机器码-amp-字节码" class="headerlink" title="2.机器码&amp;字节码"></a>2.机器码&amp;字节码</h3><ul>
 <li><p>机器码</p>
@@ -308,13 +199,13 @@
 
 2.同一份`源码`被编译成的`字节码`大小远远小于`机器码`。
 </code></pre>
-<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/6.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/6.png"></p>
 <h3 id="3-编译语言-amp-解释语言"><a href="#3-编译语言-amp-解释语言" class="headerlink" title="3.编译语言&amp;解释语言"></a>3.编译语言&amp;解释语言</h3><ul>
 <li><p>编译语言</p>
 <blockquote>
 <p>我们熟知的C/C++语言，是<code>编译语言</code>，即程序员编译之后可以一步到位（编译成机器码），可以被CPU直接解读并执行。</p>
 </blockquote>
-<p>  <img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/4.png" srcset="/img/loading.gif" lazyload></p>
+<p>  <img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/4.png"></p>
 <p>  可能有人会问，既然上文中说过<code>字节码</code>有种种好处，为什么不使用<code>字节码</code>呢？</p>
 <p>  这是因为每种编程语言设计的初衷不同,有些是为了跨平台而设计的，如Java，但有些是针对某个指定机器或某批指定型号的机器设计的。</p>
 <p>  举个🌰，苹果公司开发的OC语言和Swift语言，就是针对自家产品设计的，我才不管你其他人的产品呢。所以OC或Swift语言设计初衷之一就是快，可直接编译为机器码使iPhone或iPad解读并执行。这也是为什么苹果手机的应用比安卓手机应用大的主要原因。这更是为什么苹果手机更流畅的原因之一！(没有中间商赚差价)</p>
@@ -361,7 +252,7 @@
 </blockquote>
 <p>如果不做Android开发的可能不知道，Android项目里的代码除了Java,很有可能还有部分C语言的代码。</p>
 <p>这个时候有个严重的问题，首先上图 (图片参考方舟编译器原理PPT)：</p>
-<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/5.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/5.png"></p>
 <p>在开发阶段Java源代码在开发阶段打包成.dex文件，C语言直接就是.so库，因为C语言本身就是编译语言。</p>
 <p>在用户手机中，APK中的.dex文件（字节码）会被解释为.oat文件（机器码）运行在ART虚拟机中，.so库则为计算机可以直接运行的二进制代码（机器码），<strong>两份机器码要互相调用肯定是有开销的。</strong></p>
 <p>下面就来阐述下为什么两份机器码会不同。</p>
@@ -387,7 +278,7 @@
 <h3 id="3-字节码的编译模板——未针对具体APP进行优化"><a href="#3-字节码的编译模板——未针对具体APP进行优化" class="headerlink" title="3. 字节码的编译模板——未针对具体APP进行优化"></a>3. 字节码的编译模板——未针对具体APP进行优化</h3><blockquote>
 <p>我们举个🌰来理解编译模版，“Hello world”可以被翻译为“你好，世界”，同样也可以被翻译为“世界，你好”，这个差别就是<code>编译模版</code>不同导致的，</p>
 </blockquote>
-<h4 id="①-统一的编译模版（vm模版）"><a href="#①-统一的编译模版（vm模版）" class="headerlink" title="①. 统一的编译模版（vm模版）"></a>①. 统一的编译模版（vm模版）</h4><p><code>字节码</code>可以通过不同的编译模版被编译为<code>机器码</code>，而编译模版的不同将直接导致编译完后的<code>机器码</code>性能大相径庭。<br><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/1.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="①-统一的编译模版（vm模版）"><a href="#①-统一的编译模版（vm模版）" class="headerlink" title="①. 统一的编译模版（vm模版）"></a>①. 统一的编译模版（vm模版）</h4><p><code>字节码</code>可以通过不同的编译模版被编译为<code>机器码</code>，而编译模版的不同将直接导致编译完后的<code>机器码</code>性能大相径庭。<br><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/1.png"></p>
 <p>在安卓中，ART有一套规定的，统一的编译模版，暂且称为<code>VM模版</code>，这套模版虽算不上差劲，但也算不上优秀。</p>
 <p>因为它是谷歌爸爸搞出来的，肯定算不上差劲，但由于没有针对每一个APP进行特定的优化，所以也算不上优秀。</p>
 <h4 id="②-vm模版存在的问题"><a href="#②-vm模版存在的问题" class="headerlink" title="②. vm模版存在的问题"></a>②. vm模版存在的问题</h4><p><strong>问题就存在于没有针对每一个APP进行优化。</strong></p>
@@ -397,7 +288,7 @@
 <p>先举个🌰，一家中餐馆的招牌菜是番茄炒蛋，那么番茄炒蛋的备菜肯定很足，但是顾客A特立独行，他偏偏不要吃番茄炒蛋，他每次都点一个冷门的牛排套餐，那这时候只能让顾客等着老板将牛排套餐做完。</p>
 <p>如果一个APP的热点代码（如首页），刚好<strong>游离于VM模板之外</strong>，那么AOT就其实形同虚设了。(比如vm模版优先编译名称不大于15个字符的类和方法，但是首页的类名刚好高于15个字符。此处仅为举例并没有实际论证过）</p>
 <p>下面用首页和设置页来举例：由于遵循vm模版，AOT因为某个原因没有优先编译首页部分代码，而转而去编译了不太重要的设置页代码：</p>
-<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/2.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/2.png"></p>
 <p>上图的流程说明了在特殊情况下，AOT编译实则不起作用，完全是靠解释器和JIT在进行实时编译，整个编译方案退步到了Android2.2时期。</p>
 <h4 id="③-聪明的ART"><a href="#③-聪明的ART" class="headerlink" title="③. 聪明的ART"></a>③. 聪明的ART</h4><p>虽然这个问题存在，但并不是特别严重。因为ART并没有我说的那么笨。在之后应用使用过程中，ART会记录并学习用户的使用习惯（保存<code>热点代码</code>），然后更新针对当前APP的定制化vm模版，不断的补充<code>热点代码</code>，补充<code>定制化模版</code>。</p>
 <p>这是不是听起来很熟悉？在手机发布大会上的宣传语“基于用户操作习惯进行学习，APP打开速度不断提高”的部分原理就是这个。</p>
@@ -426,200 +317,33 @@
 <li><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/24746776/what-does-a-jvm-have-to-do-when-calling-a-native-method/24747484#24747484">What does a JVM have to do when calling a native method?</a></li>
 <li><a target="_blank" rel="noopener" href="http://rangerzhou.top/2017/06/30/Something_about_Dalvik_ART_DEX_ODEX_JIT_AOT_OAT/?nsukey=KWUsuLxXJ6ChGzbwDBgnMzhdgqAgUKf6iBc9GREdfjJepHesn95y0REYzg1sobG+4HhzWCsyxnXBfr/yoww6z+2V+QoJR8vn7ZwE1hM+c8r24Ud9l+9WZWR2Zze+/QQP0jVLUr1REv1CCc8dd5bY+ielu0/c9xtV2FEi535jGtCFrFOolR5r0GzSi/kO+A3/MsCM0W4IuSifO6qdBIlIcQ==">关于Dalvik、ART、DEX、ODEX、JIT、AOT、OAT</a></li>
 </ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">羊毛</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/">http://example.com/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">羊毛小屋</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Android/">Android</a></div><div class="post_share"><div class="social-share" data-image="/img/bg/908284.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/favicon.jpeg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">羊毛</div><div class="author-info__description">Life is a fucking movie</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">1</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">1</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BC%E8%AF%BB"><span class="toc-number">1.</span> <span class="toc-text">导读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-number">2.</span> <span class="toc-text">一、基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%BC%96%E8%AF%91-amp-%E8%A7%A3%E9%87%8A"><span class="toc-number">2.1.</span> <span class="toc-text">1.编译&amp;解释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%9C%BA%E5%99%A8%E7%A0%81-amp-%E5%AD%97%E8%8A%82%E7%A0%81"><span class="toc-number">2.2.</span> <span class="toc-text">2.机器码&amp;字节码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%BC%96%E8%AF%91%E8%AF%AD%E8%A8%80-amp-%E8%A7%A3%E9%87%8A%E8%AF%AD%E8%A8%80"><span class="toc-number">2.3.</span> <span class="toc-text">3.编译语言&amp;解释语言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%80%A0%E6%88%90%E5%8D%A1%E9%A1%BF%E7%9A%84%E4%B8%89%E5%A4%A7%E5%9B%A0%E7%B4%A0"><span class="toc-number">3.</span> <span class="toc-text">二、造成卡顿的三大因素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%99%9A%E6%8B%9F%E6%9C%BA%E2%80%94%E2%80%94%E8%A7%A3%E9%87%8A%E8%BF%87%E7%A8%8B%E6%85%A2"><span class="toc-number">3.1.</span> <span class="toc-text">1.虚拟机——解释过程慢</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0-Andorid-1-0-Dalvik-DVM-%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="toc-number">3.1.1.</span> <span class="toc-text">① Andorid 1.0 Dalvik(DVM)+解释器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1-Android-2-2-DVM-JIT"><span class="toc-number">3.1.2.</span> <span class="toc-text">② Android 2.2 DVM+JIT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2-Android-5-0-ART-AOT"><span class="toc-number">3.1.3.</span> <span class="toc-text">③ Android 5.0 ART+AOT</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3-Android-7-0-%E6%B7%B7%E5%90%88%E7%BC%96%E8%AF%91"><span class="toc-number">3.1.4.</span> <span class="toc-text">④ Android 7.0 混合编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A4-Android-8-0-%E6%94%B9%E8%BF%9B%E8%A7%A3%E9%87%8A%E5%99%A8"><span class="toc-number">3.1.5.</span> <span class="toc-text">⑤  Android 8.0 改进解释器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A5-Android-9-0-%E6%94%B9%E8%BF%9B%E7%BC%96%E8%AF%91%E6%A8%A1%E6%9D%BF"><span class="toc-number">3.1.6.</span> <span class="toc-text">⑥  Android 9.0 改进编译模板</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-JNI%E2%80%94%E2%80%94Java%E5%92%8CC%E4%BA%92%E7%9B%B8%E8%B0%83%E7%94%A8%E6%85%A2"><span class="toc-number">3.2.</span> <span class="toc-text">2.JNI——Java和C互相调用慢</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%AD%97%E8%8A%82%E7%A0%81%E7%9A%84%E7%BC%96%E8%AF%91%E6%A8%A1%E6%9D%BF%E2%80%94%E2%80%94%E6%9C%AA%E9%92%88%E5%AF%B9%E5%85%B7%E4%BD%93APP%E8%BF%9B%E8%A1%8C%E4%BC%98%E5%8C%96"><span class="toc-number">3.3.</span> <span class="toc-text">3. 字节码的编译模板——未针对具体APP进行优化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A0-%E7%BB%9F%E4%B8%80%E7%9A%84%E7%BC%96%E8%AF%91%E6%A8%A1%E7%89%88%EF%BC%88vm%E6%A8%A1%E7%89%88%EF%BC%89"><span class="toc-number">3.3.1.</span> <span class="toc-text">①. 统一的编译模版（vm模版）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A1-vm%E6%A8%A1%E7%89%88%E5%AD%98%E5%9C%A8%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.3.2.</span> <span class="toc-text">②. vm模版存在的问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A2-%E8%81%AA%E6%98%8E%E7%9A%84ART"><span class="toc-number">3.3.3.</span> <span class="toc-text">③. 聪明的ART</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%91%A3-%E6%9C%80%E7%BB%88%E5%A4%A7%E6%8B%9B%EF%BC%8C%E4%B8%80%E5%8A%B3%E6%B0%B8%E9%80%B8"><span class="toc-number">3.3.4.</span> <span class="toc-text">④. 最终大招，一劳永逸</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="toc-number">4.</span> <span class="toc-text">三、解决思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">5.</span> <span class="toc-text">四、参考资料</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/" title="安卓系统卡顿分析"><img src="/img/bg/908284.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="安卓系统卡顿分析"/></a><div class="content"><a class="title" href="/2021/11/11/%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E5%8D%A1%E9%A1%BF%E5%88%86%E6%9E%90/" title="安卓系统卡顿分析">安卓系统卡顿分析</a><time datetime="2021-11-11T07:34:02.000Z" title="发表于 2021-11-11 15:34:02">2021-11-11</time></div></div></div></div></div></div></main><footer id="footer" style="background-image: url('/img/bg/908284.png')"><div id="footer-wrap"><div class="copyright">&copy;2021 By 羊毛</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Life is a fucking movie</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font-plus" type="button" title="放大字体"><i class="fas fa-plus"></i></button><button id="font-minus" type="button" title="缩小字体"><i class="fas fa-minus"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/Android/">Android</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/Android/">Android</a>
-                    
-                  </div>
-                
-              </div>
-              
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
-              
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                  </article>
-                </div>
-              
-            </div>
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
 
-            
-          </article>
-        </div>
-      </div>
-    </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
 
-      </div>
-    
-  </div>
-</div>
-
-<!-- Custom -->
-
-
-    
-
-    
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v"
-                 for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
-    
-
-    
-  </main>
-
-  <footer class="text-center mt-5 py-3">
-  <div class="footer-content">
-     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-  </div>
-  
-
-  
-
-  
-</footer>
-
-
-  <!-- SCRIPTS -->
-  
-  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
-<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-<!-- Plugins -->
-
-
-  <script  src="/js/local-search.js" ></script>
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-  
-
-
-
-  
-    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
-  
-  
-    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
-  
-  
-    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
-  
-
-
-
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var title = document.getElementById('subtitle').title;
-      
-      typing(title)
-      
-    })(window, document);
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- 主题的启动项 保持在最底部 -->
-<script  src="/js/boot.js" ></script>
-
-
-</body>
-</html>
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="true"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
